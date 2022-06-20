@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AsignaturasController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,13 +24,27 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group([
     'prefix' => 'auth'
 ], function () {
-    Route::post('login', 'AuthController@login');
-    Route::post('signup', 'AuthController@signUp');
-
+    
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('signup', [AuthController::class, 'signUp']);
+    
     Route::group([
     'middleware' => 'auth:api'
     ], function() {
-        Route::get('logout', 'AuthController@logout');
-        Route::get('user', 'AuthController@user');
+        Route::get('logout', [AuthController::class, 'logout']);
+        Route::get('user', [AuthController::class, 'user']);
+
     });
+});
+
+
+Route::group([
+    'prefix' => 'asignaturas'
+    // 'middleware' => 'auth:api' // TODO remove to have under auth
+], function () {
+    Route::get('/', [AsignaturasController::class, 'index']); // view list
+    Route::post('/store', [AsignaturasController::class, 'store']); // store by post request
+    Route::get('/{id}', [AsignaturasController::class, 'show']);  // show single assignatura by id
+    Route::post('/update/{id}', [AsignaturasController::class, 'update']); // update post request by id
+    Route::delete('/delete/{id}', [AsignaturasController::class, 'destroy']); // delete
 });
