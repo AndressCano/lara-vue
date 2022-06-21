@@ -39,7 +39,8 @@ Route::group([
 
 
 Route::group([
-    'prefix' => 'asignaturas'
+    'prefix' => 'asignaturas',
+    'middleware' => 'cors'
     // 'middleware' => 'auth:api' // TODO remove to have under auth
 ], function () {
     Route::get('/', [AsignaturasController::class, 'index']); // view list
